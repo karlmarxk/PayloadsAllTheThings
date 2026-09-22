@@ -19,14 +19,14 @@ Check the following sub-sections, located in other chapters :
 * [Python : pickle, PyYAML, ...](Python.md)
 * [.NET : ysoserial.net, ...](DotNET.md)
 
-| Object Type     | Header (Hex)   | Header (Base64) | Indicators       |
-|-----------------|----------------|-----------------|------------------|
-| .NET ViewState  | `FF 01`        | `/w`            | Commonly found inside hidden inputs around HTML forms |
-| BinaryFormatter | `0001 0000 00FF FFFF FF01` | `AAEAAAD` | Base64 decode and check for the long `FF FF FF FF` sequence. |
-| Java Serialized | `AC ED`        | `rO`            | Base64 decode and check first bytes. |
-| PHP Serialized  | `4F 3A`        | `Tz`            | Prefixes like `O:, a:, s:, i:, b:` and length indicators. |
-| Python Pickle   | `80 04 95`     | `gASV`          | Text: opcodes like `(lp0, S'Test'`. |
-| Ruby Marshal    | `04 08`        | `BAgK`          | Base64 decode and look for `\x04\x08` at the start. |
+| Object Type     | Header (Hex)               | Header (Base64) | Indicators                                                   |
+| --------------- | -------------------------- | --------------- | ------------------------------------------------------------ |
+| .NET ViewState  | `FF 01`                    | `/w`            | Commonly found inside hidden inputs around HTML forms        |
+| BinaryFormatter | `0001 0000 00FF FFFF FF01` | `AAEAAAD`       | Base64 decode and check for the long `FF FF FF FF` sequence. |
+| Java Serialized | `AC ED`                    | `rO`            | Base64 decode and check first bytes.                         |
+| PHP Serialized  | `4F 3A`                    | `Tz`            | Prefixes like `O:, a:, s:, i:, b:` and length indicators.    |
+| Python Pickle   | `80 04 95`                 | `gASV`          | Text: opcodes like `(lp0, S'Test'`.                          |
+| Ruby Marshal    | `04 08`                    | `BAgK`          | Base64 decode and look for `\x04\x08` at the start.          |
 
 ## POP Gadgets
 
@@ -55,6 +55,6 @@ POP gadgets characteristics:
 
 ## References
 
-* [ExploitDB Introduction - Abdelazim Mohammed(@intx0x80) - May 27, 2018](https://www.exploit-db.com/docs/english/44756-deserialization-vulnerability.pdf)
-* [Exploiting insecure deserialization vulnerabilities - PortSwigger - July 25, 2020](https://portswigger.net/web-security/deserialization/exploiting)
-* [Instagram's Million Dollar Bug - Wesley Wineberg - December 17, 2015](http://www.exfiltrated.com/research-Instagram-RCE.php)
+* [ExploitDB Introduction - Abdelazim Mohammed(@intx0x80) - May 27, 2018](https://web.archive.org/web/20180527082635/https://www.exploit-db.com/docs/english/44756-deserialization-vulnerability.pdf)
+* [Exploiting insecure deserialization vulnerabilities - PortSwigger - July 25, 2020](https://web.archive.org/web/20200725143552/https://portswigger.net/web-security/deserialization/exploiting)
+* [Instagram's Million Dollar Bug - Wesley Wineberg - December 17, 2015](https://web.archive.org/web/20151217194413/http://exfiltrated.com/research-Instagram-RCE.php)

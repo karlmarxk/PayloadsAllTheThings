@@ -146,11 +146,11 @@ daemon:x:2:2:daemon:/sbin:/sbin/nologin
 
 Because Caddy is running the templates directive, it will evaluate anything in curly braces inside the context, including things from untrusted input. The `readFile` function is available in Caddy templates, so the attacker's input causes Caddy to actually read `/etc/passwd` and insert its content into the HTTP response.
 
-| Payload                       | Description |
-| ----------------------------- | ----------- |
+| Payload                       | Description                   |
+| ----------------------------- | ----------------------------- |
 | `{{env "VAR_NAME"}}`          | Get an environment variable   |
 | `{{listFiles "/"}}`           | List all files in a directory |
-| `{{readFile "path/to/file"}}` | Read a file |
+| `{{readFile "path/to/file"}}` | Read a file                   |
 
 ## Labs
 
@@ -161,5 +161,5 @@ Because Caddy is running the templates directive, it will evaluate anything in c
 
 ## References
 
-* [What is X-Forwarded-For and when can you trust it? - Phil Sturgeonopens - January 31, 2024](https://httptoolkit.com/blog/what-is-x-forwarded-for/)
-* [Common Nginx misconfigurations that leave your web server open to attack - Detectify - November 10, 2020](https://blog.detectify.com/industry-insights/common-nginx-misconfigurations-that-leave-your-web-server-ope-to-attack/)
+* [What is X-Forwarded-For and when can you trust it? - Phil Sturgeonopens - January 31, 2024](https://web.archive.org/web/20260112224231/https://httptoolkit.com/blog/what-is-x-forwarded-for/)
+* [Common Nginx misconfigurations that leave your web server open to attack - Detectify - November 10, 2020](https://web.archive.org/web/20260227155031/https://blog.detectify.com/industry-insights/common-nginx-misconfigurations-that-leave-your-web-server-ope-to-attack/)

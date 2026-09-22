@@ -29,14 +29,14 @@ Be very careful as this is most likely **out-of-scope** and can have a high impa
 
 When a process is writing a file on the server, try to reach the maximum number of files allowed by the filesystem format. The system should output a message: `No space left on device` when the limit is reached.
 
-| Filesystem | Maximum Inodes |
-| ---        | --- |
-| BTRFS      | 2^64 (~18 quintillion) |
-| EXT4       | ~4 billion |
-| FAT32      | ~268 million files |
+| Filesystem | Maximum Inodes             |
+| ---------- | -------------------------- |
+| BTRFS      | 2^64 (~18 quintillion)     |
+| EXT4       | ~4 billion                 |
+| FAT32      | ~268 million files         |
 | NTFS       | ~4.2 billion (MFT entries) |
-| XFS        | Dynamic (disk size) |
-| ZFS        | ~281 trillion |
+| XFS        | Dynamic (disk size)        |
+| ZFS        | ~281 trillion              |
 
 An alternative of this technique would be to fill a file used by the application until it reaches the maximum size allowed by the filesystem, for example it can occur on a SQLite database or a log file.
 
@@ -97,5 +97,5 @@ Depending on the technology used by the website, an attacker may have the abilit
 
 ## References
 
-* [DEF CON 32 - Practical Exploitation of DoS in Bug Bounty - Roni Lupin Carta - October 16, 2024](https://youtu.be/b7WlUofPJpU)
-* [Denial of Service Cheat Sheet - OWASP Cheat Sheet Series - July 16, 2019](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html)
+* [DEF CON 32 - Practical Exploitation of DoS in Bug Bounty - Roni Lupin Carta - October 16, 2024](https://web.archive.org/web/20241115121102/https://youtu.be/b7WlUofPJpU)
+* [Denial of Service Cheat Sheet - OWASP Cheat Sheet Series - July 16, 2019](https://web.archive.org/web/20260303124303/https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html)
